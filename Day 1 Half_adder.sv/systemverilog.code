@@ -1,0 +1,34 @@
+// Code your design here
+module half_add(
+    input  logic a, b,
+    output logic sum, carry
+);
+    xor (sum, a, b);      // sum = a XOR b
+    and (carry, a, b);    // carry = a AND b
+endmodule
+
+// Code your testbench here
+// or browse Examples
+module tb_half_adder;
+    logic a, b;
+    logic sum, carry;
+
+    // Instantiate the half adder module
+    half_add uut (
+        .a(a),
+        .b(b),
+        .sum(sum),
+        .carry(carry)
+    );
+
+    initial begin
+      $dumpfile("dump.vcd");$dumpvars;
+        $display("A B | SUM CARRY");
+        for (int i = 0; i < 4; i++) begin
+            {a, b} = i;
+            #5; // wait for values to settle
+            $display("%b %b |  %b    %b", a, b, sum, carry);
+        end
+      $finish();
+    end
+endmodule
