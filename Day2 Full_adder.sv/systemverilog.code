@@ -1,0 +1,50 @@
+// Code your design here
+module full_adder (
+    input  logic a,       // First input
+    input  logic b,       // Second input
+    input  logic cin,     // Carry input
+    output logic sum,     // Sum output
+    output logic cout     // Carry output
+);
+
+    // Full adder logic using bitwise operations
+    assign sum  = a ^ b ^ cin;
+    assign cout = (a & b) | (b & cin) | (a & cin);
+
+endmodule
+
+// Code your testbench here
+// or browse Examples
+module tb_full_adder;
+
+    // Testbench signals
+    logic a, b, cin;
+    logic sum, cout;
+
+    // Instantiate the full adder
+    full_adder uut (
+        .a(a),
+        .b(b),
+        .cin(cin),
+        .sum(sum),
+        .cout(cout)
+    );
+
+    initial begin
+      $dumpfile("dump.vcd");$dumpvars;
+        $display("A B Cin | Sum Cout");
+        $display("---------------");
+
+        // Test all input combinations
+        
+            for (int i = 0; i < 8; i++) begin
+                {a, b, cin} = i;
+                #1;
+                $display("%b %b  %b  |  %b   %b", a, b, cin, sum, cout);
+            end
+        
+
+  $finish();
+    end
+
+endmodule
