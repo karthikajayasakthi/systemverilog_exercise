@@ -1,0 +1,52 @@
+//design
+module encoder_4to2 (
+    input  logic [3:0] din,
+    output logic [1:0] dout,
+    output logic       valid
+);
+
+    always_comb begin
+        valid = 1'b1;
+        unique casez (din)
+            4'b0001: dout = 2'b00;
+            4'b0010: dout = 2'b01;
+            4'b0100: dout = 2'b10;
+            4'b1000: dout = 2'b11;
+            default: begin
+                dout  = 2'b00;
+                valid = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+
+
+//Testbench
+module encoder_4to2_tb;
+
+    logic [3:0] din;
+    logic [1:0] dout;
+    logic       valid;
+
+    encoder_4to2 dut (
+        .din(din),
+        .dout(dout),
+        .valid(valid)
+    );
+
+    initial begin
+      $dumpfile("dump.vcd");$dumpvars;
+        $display("Time\t din \t dout valid");
+        $monitor("%0t\t %b \t %b\t%b", $time, din, dout, valid);
+
+        din = 4'b0001; #10;
+        din = 4'b0010; #10;
+        din = 4'b0100; #10;
+        din = 4'b1000; #10;
+        din = 4'b0000; #10;  // Invalid input
+        din = 4'b1100; #10;  // Multiple inputs (invalid)
+        $finish;
+    end
+
+endmodule
