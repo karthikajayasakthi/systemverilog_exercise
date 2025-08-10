@@ -1,0 +1,55 @@
+//design
+module up_down_counter (
+    input  logic       clk,   
+    input  logic       reset,     
+    input  logic       enable,    
+    input  logic       up_down,   
+  output logic [3:0] count =4'b0000     
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'd0; 
+        end
+        else if (enable) begin
+            if (up_down)
+                count <= count + 1;
+            else
+                count <= count - 1; 
+        end
+    end
+endmodule
+
+// Code your testbench here
+// or browse Examples
+`timescale 1ns/1ps
+module tb_up_down_counter;
+    logic clk;
+    logic reset;
+    logic enable;
+    logic up_down;
+    logic [3:0] count;
+    up_down_counter uut (
+        .clk(clk),
+        .reset(reset),
+        .enable(enable),
+        .up_down(up_down),
+        .count(count)
+    );
+    always #5 clk = ~clk;
+    initial begin
+      $dumpfile("dump.vcd");$dumpvars;
+        clk = 0;
+        reset = 1;
+        enable = 0;
+        up_down = 1;
+        #10 reset = 0;
+        enable = 1; up_down = 1;
+        #5
+        up_down = 0;
+        #50;
+        enable = 0;
+        #20;
+      $finish();
+    end
+endmodule
